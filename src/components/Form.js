@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Error from './Error';
 
-const Form = () => {
+const Form = ({saveSearch}) => {
 
     //hook - state "term"
     const [ term, saveTerm ] = useState('');
@@ -18,7 +18,7 @@ const Form = () => {
         saveError(false);
 
         //submit the term of search towards main component
-
+        saveSearch(term);
     }
 
     return ( 
