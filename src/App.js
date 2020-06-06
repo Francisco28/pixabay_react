@@ -23,7 +23,7 @@ function App() {
 
       const imagesForPage = 30;
       const key = '16907978-904268798dc665aeb47b88d29';
-      const url = `https://pixabay.com/api/?key=${key}&q=${search}&per_page=${imagesForPage}`;
+      const url = `https://pixabay.com/api/?key=${key}&q=${search}&per_page=${imagesForPage}&page=${currentpage}`;
       
       const answer = await fetch(url);
       const result = await answer.json();
@@ -33,9 +33,15 @@ function App() {
       //calculate the total pages
       const calculateTotalPages = Math.ceil(result.totalHits / imagesForPage);
       saveTotalPages(calculateTotalPages);
+
+      //move to screen towards up
+      const jumbotron = document.querySelector('.jumbotron');
+
+      jumbotron.scrollIntoView({ behavior: 'smooth' })
+
     }
     consultAPI();
-  }, [search]);
+  }, [search, currentpage]);
 
   //define the previous page
   const previousPage = () => {
@@ -63,26 +69,30 @@ function App() {
         <Form 
           saveSearch={saveSearch}
         />
+      </div>
 
         <div className="row justify-content-center">
           <ListingImages 
               images={images}
           />
-        </div>
 
-        <button
-          type="button"
-          className="bbtn btn-info mr-1"
-          onClick={previousPage}
-        >&laquo;Previous</button>
+          { (currentpage === 1) ? null : (
+            <button
+              type="button"
+              className="bbtn btn-info mr-1"
+              onClick={previousPage}
+            >&laquo;Previous</button> 
+          )}
   
-        <button
-          type="button"
-          className="bbtn btn-info"
-          onClick={nextPage}
-        >Next&raquo;</button>
-
-      </div>      
+          
+          { (currentpage === totalpages) ? null : (
+            <button
+              type="button"
+              className="bbtn btn-info"
+              onClick={nextPage}
+            >Next&raquo;</button>
+          ) }  
+        </div>
     </div>
   );
 }
